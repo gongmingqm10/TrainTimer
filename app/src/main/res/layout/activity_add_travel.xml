@@ -43,11 +43,4 @@
             android:layout_height="wrap_content"
             android:hint="@string/depart_date"/>
     </android.support.design.widget.TextInputLayout>
-
-    <Button
-        android:id="@+id/query_time_btn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_medium"
-        android:text="@string/query_time_info"/>
 </LinearLayout>

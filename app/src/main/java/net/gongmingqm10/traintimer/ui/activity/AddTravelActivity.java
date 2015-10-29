@@ -1,4 +1,4 @@
-package net.gongmingqm10.traintimer.ui;
+package net.gongmingqm10.traintimer.ui.activity;
 
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
@@ -7,6 +7,9 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -15,6 +18,7 @@ import android.widget.Toast;
 
 import net.gongmingqm10.traintimer.R;
 import net.gongmingqm10.traintimer.network.RestClient;
+import net.gongmingqm10.traintimer.ui.fragment.DatePickerFragment;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -31,7 +35,7 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class MainActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
+public class AddTravelActivity extends BaseActivity implements DatePickerDialog.OnDateSetListener {
 
     @Bind(R.id.edit_station)
     protected EditText stationEdit;
@@ -48,16 +52,10 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
     @Bind(R.id.layout_edit_train_number)
     protected TextInputLayout layoutTrainNumber;
 
-    @Bind(R.id.query_time_btn)
-    protected Button queryBtn;
-
-    private ProgressDialog progressDialog;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
+        setContentView(R.layout.activity_add_travel);
 
         initView();
     }
@@ -71,15 +69,28 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         departDateEdit.setText(getString(R.string.format_birthday, year, monthOfYear + 1, dayOfMonth));
     }
 
-    @OnClick(R.id.query_time_btn)
-    protected void queryTrainTime(View view) {
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_add_travel, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.item_save) {
+            saveTravel();
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void saveTravel() {
         String trainNumber = trainNumberEdit.getText().toString().trim();
         String trainStation = stationEdit.getText().toString().trim();
 
         if (isValid(trainNumber, trainStation)) {
             clearErrorMessage();
-            progressDialog = ProgressDialog.show(this, "", getString(R.string.querying_train_time));
-            queryBtn.setEnabled(false);
             String stationCode = encodeStationCode(trainStation);
             String departTime = departDateEdit.getText().toString();
             int queryType = 1;
@@ -102,26 +113,14 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
                 e.printStackTrace();
             }
 
-            Toast.makeText(MainActivity.this, sb.toString().trim(), Toast.LENGTH_LONG).show();
-
-            dismissProgressDialog();
-            queryBtn.setEnabled(true);
+            Toast.makeText(AddTravelActivity.this, sb.toString().trim(), Toast.LENGTH_LONG).show();
         }
 
         @Override
         public void failure(RetrofitError error) {
-            Toast.makeText(MainActivity.this, getString(R.string.query_failed_try_again), Toast.LENGTH_SHORT).show();
-            dismissProgressDialog();
-            queryBtn.setEnabled(true);
-            Log.e("gongmingqm10", error.toString());
+            Toast.makeText(AddTravelActivity.this, getString(R.string.query_failed_try_again), Toast.LENGTH_SHORT).show();
         }
     };
-
-    private void dismissProgressDialog() {
-        if (progressDialog != null && progressDialog.isShowing()) {
-            progressDialog.dismiss();
-        }
-    }
 
     private String encodeStationCode(String stationName) {
         String encodedText = null;
@@ -141,7 +140,6 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
     }
 
     @OnClick(R.id.depart_date)
-    @OnFocusChange(R.id.depart_date)
     protected void selectDate(View view) {
         if (view.isFocused()) {
             DatePickerFragment fragment = new DatePickerFragment();

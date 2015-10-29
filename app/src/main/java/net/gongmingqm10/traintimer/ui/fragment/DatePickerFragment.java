@@ -1,4 +1,4 @@
-package net.gongmingqm10.traintimer.ui;
+package net.gongmingqm10.traintimer.ui.fragment;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
