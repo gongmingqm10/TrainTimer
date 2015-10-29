@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">正点火车</string>
+    <string name="station">车站</string>
+    <string name="train_number">车次</string>
+    <string name="depart_date">出发日期</string>
+    <string name="query_time_info">查询时刻</string>
+    <string name="please_input_train_number">请输入车次</string>
+    <string name="please_input_station">请输入出发/到达站点</string>
+    <string name="format_birthday">%1$s-%2$s-%3$s</string>
+    <string name="querying_train_time">正在查询列车到站/离站时刻</string>
+    <string name="query_failed_try_again">查询失败，稍后重试</string>
+</resources>
