@@ -3,6 +3,7 @@ package net.gongmingqm10.traintimer.ui.activity;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.text.TextUtils;
@@ -35,7 +36,7 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class AddTravelActivity extends BaseActivity
+public class NewTripActivity extends BaseActivity
         implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
     @Bind(R.id.edit_station)
@@ -59,7 +60,7 @@ public class AddTravelActivity extends BaseActivity
     @Bind(R.id.layout_edit_train_number)
     protected TextInputLayout layoutTrainNumber;
 
-    public static final int REQUEST_SELECT_STATION = 100;
+    public static final String PARAM_TRIP = "param_trip";
 
     private Station selectedStation;
     private Calendar departCalendar = Calendar.getInstance();
@@ -111,6 +112,9 @@ public class AddTravelActivity extends BaseActivity
             trip.setHasReminder(false);
 
             TrainApp.getInstance().getTripDao().insert(trip);
+            Intent intent = new Intent();
+            intent.putExtra(PARAM_TRIP, trip);
+            setResult(RESULT_OK, intent);
             finish();
         }
     }
@@ -129,12 +133,12 @@ public class AddTravelActivity extends BaseActivity
                 e.printStackTrace();
             }
 
-            Toast.makeText(AddTravelActivity.this, sb.toString().trim(), Toast.LENGTH_LONG).show();
+            Toast.makeText(NewTripActivity.this, sb.toString().trim(), Toast.LENGTH_LONG).show();
         }
 
         @Override
         public void failure(RetrofitError error) {
-            Toast.makeText(AddTravelActivity.this, getString(R.string.query_failed_try_again), Toast.LENGTH_SHORT).show();
+            Toast.makeText(NewTripActivity.this, getString(R.string.query_failed_try_again), Toast.LENGTH_SHORT).show();
         }
     };
 
@@ -153,50 +157,6 @@ public class AddTravelActivity extends BaseActivity
     protected void selectTime(View view) {
         TimePickerFragment fragment = new TimePickerFragment();
         fragment.show(getSupportFragmentManager(), "timePicker");
-    }
-
-    private ProgressDialog progressDialog;
-
-
-//    @OnClick(R.id.edit_station)
-//    protected void selectStation() {
-//
-//        progressDialog = ProgressDialog.show(this, "", getString(R.string.is_fetching_stations));
-//
-//        Observable.create(new Observable.OnSubscribe<ArrayList<Station>>() {
-//            @Override
-//            public void call(Subscriber<? super ArrayList<Station>> subscriber) {
-//                List<Station> stations = TrainApp.getInstance().getStationDao().loadAll();
-//                TrainApp.getInstance().getStationDao().loadAll();
-//                if (stations == null || stations.isEmpty()) {
-//                    subscriber.onError(new StationsEmptyException("Stations is not loaded"));
-//                } else {
-//                    ArrayList<Station> wrappedStations = StationUtils.wrapStations(stations);
-//                    subscriber.onNext(wrappedStations);
-//                    subscriber.onCompleted();
-//                }
-//            }
-//        }).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io())
-//                .subscribe(new Action1<ArrayList<Station>>() {
-//                    @Override
-//                    public void call(ArrayList<Station> stations) {
-//                        dismissProgressDialog();
-//                        Intent intent = new Intent(AddTravelActivity.this, StationSelectActivity.class);
-//                        startActivityForResult(intent, REQUEST_SELECT_STATION);
-//                    }
-//                }, new Action1<Throwable>() {
-//                    @Override
-//                    public void call(Throwable throwable) {
-//                        dismissProgressDialog();
-//                        showToast(R.string.fetching_station_failed);
-//                    }
-//                });
-//    }
-
-    private void dismissProgressDialog() {
-        if (progressDialog != null && progressDialog.isShowing() & !isFinishing()) {
-            progressDialog.dismiss();
-        }
     }
 
     private boolean isValid(String trainNumber, String trainStation, String departTime) {
@@ -238,14 +198,4 @@ public class AddTravelActivity extends BaseActivity
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         departTimeEdit.setText(getString(R.string.format_time, hourOfDay, minute));
     }
-
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//
-//        if (requestCode == REQUEST_SELECT_STATION && resultCode == RESULT_OK && data != null) {
-//            selectedStation = (Station) data.getSerializableExtra(StationSelectActivity.PARAM_STATION_SELECTED);
-//            stationEdit.setText(selectedStation.getName());
-//        }
-//    }
 }

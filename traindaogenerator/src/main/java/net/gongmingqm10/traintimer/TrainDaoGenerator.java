@@ -25,6 +25,7 @@ public class TrainDaoGenerator {
         station.addStringProperty("name");
         station.addStringProperty("englishName");
         station.addStringProperty("code");
+        station.implementsSerializable();
 
         Entity trip = schema.addEntity("Trip");
         trip.addIdProperty();
@@ -37,9 +38,9 @@ public class TrainDaoGenerator {
         trip.addStringProperty("arriveMessage");
         trip.addStringProperty("departMessage");
         trip.addBooleanProperty("hasReminder");
-
         Property stationCodeProperty = trip.addLongProperty("stationId").notNull().getProperty();
         trip.addToOne(station, stationCodeProperty);
+        trip.implementsSerializable();
     }
 
 }

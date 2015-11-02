@@ -21,7 +21,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.activity.AddTravelActivity"
+            android:name=".ui.activity.NewTripActivity"
             android:label="@string/title_activity_add_travel"
             android:parentActivityName=".ui.activity.HomeActivity" />
     </application>

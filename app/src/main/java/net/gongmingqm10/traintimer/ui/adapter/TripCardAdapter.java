@@ -9,6 +9,7 @@ import net.gongmingqm10.traintimer.R;
 import net.gongmingqm10.traintimer.data.Trip;
 import net.gongmingqm10.traintimer.ui.view.TripCardViewHolder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TripCardAdapter extends RecyclerView.Adapter<TripCardViewHolder> {
@@ -33,5 +34,16 @@ public class TripCardAdapter extends RecyclerView.Adapter<TripCardViewHolder> {
     @Override
     public int getItemCount() {
         return trips == null ? 0 : trips.size();
+    }
+
+    public void addTrip(Trip trip) {
+        if (trips == null) {
+            trips = new ArrayList<>();
+        }
+
+        if (trip != null) {
+            trips.add(0, trip);
+            notifyDataSetChanged();
+        }
     }
 }

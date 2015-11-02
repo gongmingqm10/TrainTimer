@@ -12,21 +12,30 @@ import net.gongmingqm10.traintimer.TrainApp;
 import net.gongmingqm10.traintimer.data.Station;
 import net.gongmingqm10.traintimer.data.StationDao;
 import net.gongmingqm10.traintimer.data.Trip;
+import net.gongmingqm10.traintimer.data.TripDao;
 import net.gongmingqm10.traintimer.network.RestClient;
 import net.gongmingqm10.traintimer.network.model.StationResponse;
 import net.gongmingqm10.traintimer.ui.adapter.TripCardAdapter;
 import net.gongmingqm10.traintimer.ui.view.SpacesItemDecration;
 import net.gongmingqm10.traintimer.util.PreferencesManager;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.OnClick;
 import de.greenrobot.dao.query.Query;
+import rx.Observable;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.schedulers.Schedulers;
 
 public class HomeActivity extends BaseActivity {
 
     private static final long STATION_UPDATE_TIMEOUT = 24 * 3600 * 1000;
+
+    private static final int REQUEST_ADD_TRIP = 100;
 
     @Bind(R.id.train_list)
     protected RecyclerView tripRecyclerView;
@@ -52,14 +61,14 @@ public class HomeActivity extends BaseActivity {
         int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.card_margin);
         tripRecyclerView.addItemDecoration(new SpacesItemDecration(spacingInPixels));
 
-        List<Trip> trips = TrainApp.getInstance().getTripDao().loadAll();
+        List<Trip> trips = TrainApp.getInstance().getTripDao().queryBuilder().orderDesc(TripDao.Properties.Id).list();
         tripAdapter = new TripCardAdapter(trips);
         tripRecyclerView.setAdapter(tripAdapter);
     }
 
     @OnClick(R.id.fab)
     protected void addNewTravel(View view) {
-        startActivity(new Intent(this, AddTravelActivity.class));
+        startActivityForResult(new Intent(this, NewTripActivity.class), REQUEST_ADD_TRIP);
     }
 
     private void requestStation() {
@@ -96,4 +105,13 @@ public class HomeActivity extends BaseActivity {
         return System.currentTimeMillis() - lastUpdatedTime > STATION_UPDATE_TIMEOUT;
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK && requestCode == REQUEST_ADD_TRIP) {
+            Trip trip = (Trip) data.getSerializableExtra(NewTripActivity.PARAM_TRIP);
+            tripAdapter.addTrip(trip);
+        }
+    }
 }

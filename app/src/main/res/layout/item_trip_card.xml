@@ -69,6 +69,7 @@
                 android:textStyle="bold"
                 tools:text="12:54" />
             <TextView
+                android:id="@+id/card_depart_date"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
                 android:layout_marginTop="32dp"

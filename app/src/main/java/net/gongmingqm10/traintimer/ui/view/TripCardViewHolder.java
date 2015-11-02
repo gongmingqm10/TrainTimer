@@ -6,8 +6,11 @@ import android.view.View;
 import android.widget.TextView;
 
 import net.gongmingqm10.traintimer.R;
+import net.gongmingqm10.traintimer.TrainApp;
 import net.gongmingqm10.traintimer.data.Trip;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Random;
 
 import butterknife.Bind;
@@ -35,6 +38,9 @@ public class TripCardViewHolder extends RecyclerView.ViewHolder {
 
     @Bind(R.id.reminder_btn)
     protected TextView reminderBtn;
+
+    @Bind(R.id.card_depart_date)
+    protected TextView departureDateText;
 
     @Bind(R.id.card_header_wrapper)
     protected View headWrapper;
@@ -84,6 +90,14 @@ public class TripCardViewHolder extends RecyclerView.ViewHolder {
 
         int randomPosition = new Random().nextInt(resIds.length);
         headWrapper.setBackgroundResource(resIds[randomPosition]);
+
+        String formattedDate = formatDate(trip.getTripDate());
+        departureDateText.setText(TrainApp.getInstance().getString(R.string.format_departure_date, formattedDate));
+    }
+
+    private String formatDate(Date date) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        return format.format(date);
     }
 
 
