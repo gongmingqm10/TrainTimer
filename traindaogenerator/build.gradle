@@ -1,0 +1,12 @@
+apply plugin: 'java'
+
+group = 'net.gongmingqm10'
+version = '1.0.0-SNAPSHOT'
+
+dependencies {
+    compile 'de.greenrobot:greendao-generator:2.0.0'
+}
+
+artifacts {
+    archives jar
+}

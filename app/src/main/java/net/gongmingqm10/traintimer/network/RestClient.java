@@ -6,11 +6,17 @@ public class RestClient {
 
     private static RestClient instance;
 
-    private RestAdapter restAdapter;
+    private RestAdapter trainAdapter;
+    private RestAdapter qiniuAdapter;
 
     private RestClient() {
-        restAdapter = new RestAdapter.Builder()
+        trainAdapter = new RestAdapter.Builder()
                 .setEndpoint(ApiEnvironment.TRAIN_URL)
+                .setLogLevel(RestAdapter.LogLevel.FULL)
+                .build();
+
+        qiniuAdapter = new RestAdapter.Builder()
+                .setEndpoint(ApiEnvironment.QINIU_URL)
                 .setLogLevel(RestAdapter.LogLevel.FULL)
                 .build();
     }
@@ -23,7 +29,11 @@ public class RestClient {
     }
 
     public TrainService getTrainService() {
-        return restAdapter.create(TrainService.class);
+        return trainAdapter.create(TrainService.class);
+    }
+
+    public QiniuService getQiniuService() {
+        return qiniuAdapter.create(QiniuService.class);
     }
 
 
