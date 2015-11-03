@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="account_type">net.gongmingqqm10.train</string>
+    <string name="account_name">Passenger</string>
+    <string name="content_authority">net.gongmingqqm10.train.provider</string>
+</resources>

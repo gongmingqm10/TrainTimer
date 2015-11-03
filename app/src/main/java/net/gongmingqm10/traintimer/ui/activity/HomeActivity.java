@@ -13,6 +13,7 @@ import net.gongmingqm10.traintimer.data.Station;
 import net.gongmingqm10.traintimer.data.StationDao;
 import net.gongmingqm10.traintimer.data.Trip;
 import net.gongmingqm10.traintimer.data.TripDao;
+import net.gongmingqm10.traintimer.event.TripsUpdateEvent;
 import net.gongmingqm10.traintimer.network.RestClient;
 import net.gongmingqm10.traintimer.network.model.StationResponse;
 import net.gongmingqm10.traintimer.ui.adapter.TripCardAdapter;
@@ -25,6 +26,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.OnClick;
 import de.greenrobot.dao.query.Query;
+import de.greenrobot.event.EventBus;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -61,8 +63,7 @@ public class HomeActivity extends BaseActivity {
         int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.card_margin);
         tripRecyclerView.addItemDecoration(new SpacesItemDecration(spacingInPixels));
 
-        List<Trip> trips = TrainApp.getInstance().getTripDao().queryBuilder().orderDesc(TripDao.Properties.Id).list();
-        tripAdapter = new TripCardAdapter(trips);
+        tripAdapter = new TripCardAdapter(new ArrayList<Trip>());
         tripRecyclerView.setAdapter(tripAdapter);
     }
 
@@ -113,5 +114,40 @@ public class HomeActivity extends BaseActivity {
             Trip trip = (Trip) data.getSerializableExtra(NewTripActivity.PARAM_TRIP);
             tripAdapter.addTrip(trip);
         }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Observable.create(new Observable.OnSubscribe<List<Trip>>() {
+            @Override
+            public void call(Subscriber<? super List<Trip>> subscriber) {
+                List<Trip> trips = TrainApp.getInstance().getTripDao().queryBuilder().orderDesc(TripDao.Properties.Id).list();
+                subscriber.onNext(trips);
+                subscriber.onCompleted();
+            }
+        }).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io())
+                .subscribe(new Action1<List<Trip>>() {
+                    @Override
+                    public void call(List<Trip> trips) {
+                        tripAdapter.updateTrips(trips);
+                    }
+                });
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    public void onEvent(TripsUpdateEvent event) {
+        tripAdapter.updateTrips(event.getTrips());
     }
 }

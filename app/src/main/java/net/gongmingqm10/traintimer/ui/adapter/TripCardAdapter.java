@@ -46,4 +46,9 @@ public class TripCardAdapter extends RecyclerView.Adapter<TripCardViewHolder> {
             notifyDataSetChanged();
         }
     }
+
+    public void updateTrips(List<Trip> trips) {
+        this.trips = trips;
+        notifyDataSetChanged();
+    }
 }

@@ -8,6 +8,7 @@ import android.widget.TextView;
 import net.gongmingqm10.traintimer.R;
 import net.gongmingqm10.traintimer.TrainApp;
 import net.gongmingqm10.traintimer.data.Trip;
+import net.gongmingqm10.traintimer.util.DateUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -77,7 +78,7 @@ public class TripCardViewHolder extends RecyclerView.ViewHolder {
         if (TextUtils.isEmpty(trip.getArriveMessage())) {
             arrivalInfoText.setText(R.string.no_arrive_time_info);
         } else {
-            arrivalInfoText.setText(trip.getArriveTime());
+            arrivalInfoText.setText(trip.getArriveMessage());
         }
 
         if (trip.getHasReminder() != null && trip.getHasReminder()) {
@@ -88,17 +89,14 @@ public class TripCardViewHolder extends RecyclerView.ViewHolder {
             reminderBtn.setText(R.string.add_reminder);
         }
 
-        int randomPosition = new Random().nextInt(resIds.length);
+        int randomPosition = trip.hashCode() % 2;
         headWrapper.setBackgroundResource(resIds[randomPosition]);
 
-        String formattedDate = formatDate(trip.getTripDate());
+        String formattedDate = DateUtils.formatDate(trip.getTripDate());
         departureDateText.setText(TrainApp.getInstance().getString(R.string.format_departure_date, formattedDate));
     }
 
-    private String formatDate(Date date) {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        return format.format(date);
-    }
+
 
 
 }
