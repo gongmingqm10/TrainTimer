@@ -36,3 +36,5 @@
     public static java.lang.String TABLENAME;
 }
 -keep class **$Properties
+
+-dontwarn rx.internal.util.unsafe.**

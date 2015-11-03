@@ -11,9 +11,21 @@ android {
         versionCode 1
         versionName "1.0"
     }
+
+    signingConfigs {
+        release {
+            storeFile file("../train_timer")
+            storePassword  System.getenv("TRAINPWD")
+            keyAlias "traintimer"
+            keyPassword System.getenv("TRAINPWD")
+        }
+    }
+
+
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
