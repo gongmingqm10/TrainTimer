@@ -107,7 +107,7 @@ public class NewTripActivity extends BaseActivity
             Trip trip = new Trip();
             trip.setTripDate(departCalendar.getTime());
             trip.setStation(selectedStation);
-            trip.setDepartTime(departTime);
+            trip.setScheduledDepartTime(departTime);
             trip.setTrainNumber(trainNumber);
             trip.setHasReminder(false);
 
@@ -118,29 +118,6 @@ public class NewTripActivity extends BaseActivity
             finish();
         }
     }
-
-    private Callback<Response> queryCallback = new Callback<Response>() {
-        @Override
-        public void success(Response result, Response response) {
-            StringBuilder sb = new StringBuilder();
-            try {
-                BufferedReader reader = new BufferedReader(new InputStreamReader(result.getBody().in(), "GBK"));
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    sb.append(line);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            Toast.makeText(NewTripActivity.this, sb.toString().trim(), Toast.LENGTH_LONG).show();
-        }
-
-        @Override
-        public void failure(RetrofitError error) {
-            Toast.makeText(NewTripActivity.this, getString(R.string.query_failed_try_again), Toast.LENGTH_SHORT).show();
-        }
-    };
 
     private void clearErrorMessage() {
         layoutTrainNumber.setError(null);

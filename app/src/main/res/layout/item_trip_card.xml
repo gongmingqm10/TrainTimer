@@ -94,7 +94,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/font_color_secondary"
-            android:textSize="16sp"
+            android:textSize="13sp"
             android:text="@string/no_arrive_time_info"
             android:gravity="center_vertical"
             />
@@ -108,23 +108,21 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/font_color_secondary"
-            android:textSize="16sp"
+            android:textSize="13sp"
             android:text="@string/no_depart_time_info"
             android:gravity="center_vertical"
             />
 
-        <TextView
+        <Button
+            style="@style/Widget.AppCompat.Button.Borderless"
             android:id="@+id/reminder_btn"
             android:clickable="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="12dp"
-            android:layout_marginBottom="12dp"
+            android:layout_marginLeft="8dp"
             android:layout_below="@id/card_train_depart_info"
             android:textSize="16sp"
             android:textColor="@color/reminder_color"
-            android:drawableLeft="@drawable/alert_selector"
             android:text="@string/add_reminder"
             />
     </RelativeLayout>

@@ -3,6 +3,7 @@ package net.gongmingqm10.traintimer.ui.view;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import net.gongmingqm10.traintimer.R;
@@ -38,7 +39,7 @@ public class TripCardViewHolder extends RecyclerView.ViewHolder {
     protected TextView departureInfoText;
 
     @Bind(R.id.reminder_btn)
-    protected TextView reminderBtn;
+    protected Button reminderBtn;
 
     @Bind(R.id.card_depart_date)
     protected TextView departureDateText;

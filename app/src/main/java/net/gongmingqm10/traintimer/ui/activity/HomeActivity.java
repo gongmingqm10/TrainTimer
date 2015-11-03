@@ -2,6 +2,7 @@ package net.gongmingqm10.traintimer.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -16,6 +17,7 @@ import net.gongmingqm10.traintimer.data.TripDao;
 import net.gongmingqm10.traintimer.event.TripsUpdateEvent;
 import net.gongmingqm10.traintimer.network.RestClient;
 import net.gongmingqm10.traintimer.network.model.StationResponse;
+import net.gongmingqm10.traintimer.sync.TripSyncManager;
 import net.gongmingqm10.traintimer.ui.adapter.TripCardAdapter;
 import net.gongmingqm10.traintimer.ui.view.SpacesItemDecration;
 import net.gongmingqm10.traintimer.util.PreferencesManager;
@@ -42,6 +44,9 @@ public class HomeActivity extends BaseActivity {
     @Bind(R.id.train_list)
     protected RecyclerView tripRecyclerView;
 
+    @Bind(R.id.swipe_refresh_layout)
+    protected SwipeRefreshLayout swipeRefreshLayout;
+
     private TripCardAdapter tripAdapter;
 
     @Override
@@ -65,6 +70,30 @@ public class HomeActivity extends BaseActivity {
 
         tripAdapter = new TripCardAdapter(new ArrayList<Trip>());
         tripRecyclerView.setAdapter(tripAdapter);
+
+        swipeRefreshLayout.setColorSchemeColors(R.color.orange, R.color.green, R.color.colorPrimary);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Observable.create(new Observable.OnSubscribe<List<Trip>>() {
+                    @Override
+                    public void call(Subscriber<? super List<Trip>> subscriber) {
+                        List<Trip> trips = TripSyncManager.getInstance().sync();
+                        subscriber.onNext(trips);
+                        subscriber.onCompleted();
+                    }
+                }).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io())
+                        .subscribe(new Action1<List<Trip>>() {
+                            @Override
+                            public void call(List<Trip> trips) {
+                                if (swipeRefreshLayout.isRefreshing()) {
+                                    swipeRefreshLayout.setRefreshing(false);
+                                }
+                                tripAdapter.updateTrips(trips);
+                            }
+                        });
+            }
+        });
     }
 
     @OnClick(R.id.fab)
@@ -83,7 +112,6 @@ public class HomeActivity extends BaseActivity {
                     for (StationResponse stationResponse : response) {
                         Query query = stationDao.queryBuilder().where(
                                 StationDao.Properties.Code.eq(stationResponse.getCode())).build();
-
 
                         if (query.list().isEmpty()) {
                             Station station = new Station();
