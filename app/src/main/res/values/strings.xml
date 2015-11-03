@@ -24,4 +24,5 @@
     <string name="add_reminder">添加提醒</string>
     <string name="already_reminded">已提醒</string>
     <string name="no_time">暂无</string>
+    <string name="confirm_add_reminder">确认添加提醒？</string>
 </resources>

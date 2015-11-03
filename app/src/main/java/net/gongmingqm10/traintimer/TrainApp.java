@@ -26,16 +26,13 @@ public class TrainApp extends Application {
         instance = this;
 
         PreferencesManager.getInstance().init(this);
-
         initDB();
-
         startSync();
     }
 
     private void startSync() {
-
         Account account = getStubAccount();
-        ContentResolver.addPeriodicSync(account, getString(R.string.content_authority), Bundle.EMPTY, 60);
+        ContentResolver.addPeriodicSync(account, getString(R.string.content_authority), Bundle.EMPTY, 3 * 60);
     }
 
     public Account getStubAccount() {
