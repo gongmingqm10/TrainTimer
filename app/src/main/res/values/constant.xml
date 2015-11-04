@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="umeng_app_key">56396495e0f55a0e28000479</string>
+    <integer name="baidu_app_id">7184297</integer>
+    <string name="baidu_app_key">kMnyG7rnQzUT2WUgtjz0MMRCmh5uvd5W</string>
     <string name="account_type">net.gongmingqqm10.train</string>
     <string name="account_name">Passenger</string>
     <string name="content_authority">net.gongmingqqm10.train.provider</string>

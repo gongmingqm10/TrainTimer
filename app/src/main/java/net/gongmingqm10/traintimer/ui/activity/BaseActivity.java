@@ -4,6 +4,9 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
+import com.baidu.mobstat.StatService;
+import com.umeng.analytics.MobclickAgent;
+
 import butterknife.ButterKnife;
 
 public class BaseActivity extends AppCompatActivity {
@@ -23,4 +26,17 @@ public class BaseActivity extends AppCompatActivity {
         Toast.makeText(this, resId, Toast.LENGTH_SHORT).show();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+        StatService.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+        StatService.onPause(this);
+    }
 }

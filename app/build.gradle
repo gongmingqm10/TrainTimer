@@ -12,6 +12,14 @@ android {
         versionName "1.0"
     }
 
+    productFlavors {
+        wandoujia {}
+        baidu {}
+        tencent {}
+        xiaomi {}
+        qihoo {}
+    }
+
     signingConfigs {
         release {
             storeFile file("../train_timer")
@@ -21,13 +29,18 @@ android {
         }
     }
 
-
     buildTypes {
         release {
             minifyEnabled true
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+
+    packagingOptions {
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+        exclude '.readme'
     }
 }
 
@@ -43,6 +56,7 @@ dependencies {
     compile 'io.reactivex:rxjava:1.0.14'
     compile 'io.reactivex:rxandroid:1.0.1'
     compile 'de.greenrobot:eventbus:2.4.0'
+    compile 'com.umeng.analytics:analytics:latest.integration'
 
     testCompile 'junit:junit:4.12'
     testCompile 'org.assertj:assertj-core:1.7.1'

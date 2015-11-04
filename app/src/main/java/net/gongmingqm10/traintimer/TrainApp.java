@@ -32,7 +32,7 @@ public class TrainApp extends Application {
 
     private void startSync() {
         Account account = getStubAccount();
-        ContentResolver.addPeriodicSync(account, getString(R.string.content_authority), Bundle.EMPTY, 3 * 60);
+        ContentResolver.addPeriodicSync(account, getString(R.string.content_authority), Bundle.EMPTY, 5 * 60);
     }
 
     public Account getStubAccount() {

@@ -38,3 +38,15 @@
 -keep class **$Properties
 
 -dontwarn rx.internal.util.unsafe.**
+
+-keepclassmembers class * {
+   public <init>(org.json.JSONObject);
+}
+-keep class com.umeng.analytics.** {*;}
+-dontwarn com.umeng.analytics.**
+
+-keep class org.apache.http.**{*;}
+-dontwarn org.apache.http.**
+
+-keep class com.baidu.autoupdatesdk.**{*;}
+-dontwarn com.baidu.autoupdatesdk
