@@ -8,8 +8,8 @@ android {
         applicationId "net.gongmingqm10.traintimer"
         minSdkVersion 17
         targetSdkVersion 23
-        versionCode 2
-        versionName "1.1"
+        versionCode 3
+        versionName "1.2"
     }
 
     productFlavors {
@@ -18,11 +18,12 @@ android {
         tencent {}
         xiaomi {}
         qihoo {}
+        google {}
     }
 
     signingConfigs {
         release {
-            storeFile file("../train_timer")
+            storeFile file("../train-release-key.keystore")
             storePassword  System.getenv("TRAINPWD")
             keyAlias "traintimer"
             keyPassword System.getenv("TRAINPWD")
