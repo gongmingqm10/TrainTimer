@@ -8,9 +8,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
-import com.baidu.autoupdatesdk.BDAutoUpdateSDK;
-import com.baidu.kirin.StatUpdateAgent;
-
 import net.gongmingqm10.traintimer.R;
 import net.gongmingqm10.traintimer.TrainApp;
 import net.gongmingqm10.traintimer.data.Station;
@@ -59,8 +56,6 @@ public class HomeActivity extends BaseActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        BDAutoUpdateSDK.silenceUpdateAction(this);
 
         requestStation();
 
@@ -180,7 +175,7 @@ public class HomeActivity extends BaseActivity {
         EventBus.getDefault().unregister(this);
     }
 
-    public void onEvent(TripsUpdateEvent event) {
+    public void onEventMainThread(TripsUpdateEvent event) {
         tripAdapter.updateTrips(event.getTrips());
     }
 }

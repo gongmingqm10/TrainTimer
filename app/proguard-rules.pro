@@ -19,6 +19,13 @@
 -keep class retrofit.** { *; }
 -keepattributes Signature
 -keepattributes Exceptions
+-keepattributes Annotation
+-keep class retrofit.** { *; }
+-keepclasseswithmembers class * {
+    @retrofit.http.* <methods>;
+}
+-dontwarn rx.**
+
 
 -keep class butterknife.** { *; }
 -dontwarn butterknife.internal.**
@@ -30,6 +37,15 @@
 
 -keepclasseswithmembernames class * {
     @butterknife.* <methods>;
+}
+
+-keepclassmembers class ** {
+    public void onEvent*(**);
+}
+
+# Only required if you use AsyncExecutor
+-keepclassmembers class * extends de.greenrobot.event.util.ThrowableFailureEvent {
+    <init>(java.lang.Throwable);
 }
 
 -keepclassmembers class * extends de.greenrobot.dao.AbstractDao {
@@ -47,6 +63,3 @@
 
 -keep class org.apache.http.**{*;}
 -dontwarn org.apache.http.**
-
--keep class com.baidu.autoupdatesdk.**{*;}
--dontwarn com.baidu.autoupdatesdk
